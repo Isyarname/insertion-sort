@@ -12,7 +12,7 @@ class Cell:
 		self.y1 = self.y
 		self.width = width
 		self.color = color
-		self.v = 0.05
+		self.v = 1
 		self.moving = False
 		self.shift = 0
 		self.surface = surf
@@ -24,7 +24,7 @@ class Cell:
 
 	def lower(self):
 		self.moving = True
-		self.y1 = self.y + self.width*4
+		self.y1 = self.y + self.width*2
 
 	def setpos(self, pos):
 		self.moving = True
@@ -77,10 +77,6 @@ class Triangle(Cell):
 		self.v = 0.05
 		self.moving = False
 		self.surface = surf
-
-	def lower(self):
-		self.moving = True
-		self.y1 = self.y + self.width*4
 
 	def setpos(self, pos):
 		self.moving = True

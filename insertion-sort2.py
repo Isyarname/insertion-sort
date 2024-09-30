@@ -9,19 +9,36 @@ clock = pygame.time.Clock()
 pygame.init()
 
 Width = 1500
-cellsNumber = 100
-border = Width/cellsNumber
-gap = (Width - 2*border) / (cellsNumber-1)
+Height = 700
+cellsNumber = 1000
+numberOfLines = cellsNumber // 30
+
+lineLength = 2
+gap = Width / (lineLength+1)
 width = round(gap/2)
 
-Height = 200 + width * 5
+def cellpos(i):
+	x = gap + (i%lineLength) * gap
+	y = width*3 + (i//lineLength) * width*5
+	return (x, y)
+
+while cellpos(cellsNumber-1)[1] > Height - width*3:
+		lineLength += 1
+		gap = Width / (lineLength+1)
+		width = round(gap/2)
+
+
+
 sc = pygame.display.set_mode((Width, Height))
 
-def getpos(i):
-	return border+i*gap, Height/3
+def cellpos(i):
+	x = gap + (i%lineLength) * gap
+	y = width*3 + (i//lineLength) * width*5
+	return (x, y)
 
-def trianglePos(i):
-	return (border+cur*gap, Height/3 - width*2)
+def trianglePos(x):
+	cp = cellpos(x)
+	return (cp[0], cp[1]-width*2)#(border+cur*gap, Height/3 - width*2)
 
 def _qiut():
 	pygame.quit()
@@ -34,15 +51,6 @@ def events():
 		elif event.type == pygame.KEYDOWN:
 			pass
 
-def allCellsNotSelected(d = 0):
-	for cell in cells:
-		if cell.selected:
-			if False:#time.time() - cell.selectedTime < d:
-				return False
-			else:
-				cell.selected = False
-	return True
-
 def allCellsNotMoving():
 	for cell in cells:
 		if cell.moving:
@@ -53,10 +61,10 @@ indices = list(range(cellsNumber))
 random.shuffle(indices)
 #start = 10
 #indices = random.sample(range(start, cellsNumber+start), cellsNumber)
-colors = genColors(max(indices), min(indices), 0, type_=2)
+colors = genColors(max(indices), min(indices), type_=2)
 cells = []
 for i, e in enumerate(indices):
-	cells.append(Cell(sc, width, colors[e], e, getpos(i)))
+	cells.append(Cell(sc, width, colors[e], e, cellpos(i)))
 
 cur = 1
 triangle = Triangle(sc, width/2, (255,255,255), 0, trianglePos(cur))
@@ -73,21 +81,27 @@ def play():
 	global temp
 	global prevTempI
 	global isSorted
+
 	if temp.isNext and not cells[prevTempI].moving:
 			cells[prevTempI].selected = False
 			cells[prevTempI-1].selected = False
 			temp.lower()
 			temp.isNext = False
 			temp.selected = True
+
 	if not isSorted and cur >= cellsNumber:
 		isSorted = True
-
-	if allCellsNotMoving() and not isSorted and allCellsNotSelected():
+		for cell in cells:
+			cell.selected = False
+	
+	if allCellsNotMoving() and not isSorted:
+		for cell in cells:
+			cell.selected = False
 		if i >= 0:
 			cells[i].selected = True
 			cells[i].selectedTime = time.time()
 		if i == -1 or temp.number > cells[i].number:
-			temp.setpos(getpos(i+1))
+			temp.setpos(cellpos(i+1))
 			cells[i+1] = temp
 			prevTempI = i + 1
 			cur += 1
@@ -97,7 +111,7 @@ def play():
 				temp.isNext = True
 			i = cur - 1
 		else: # если номер i-й клетки больше номера текущей проверяемой клетки
-			cells[i].setpos(getpos(i+1))
+			cells[i].setpos(cellpos(i+1))
 			cells[i+1] = cells[i]
 			i -= 1
 

@@ -47,10 +47,10 @@ def genColor2(i, maxNumber, minNumber=0, bright=True):
 def genColors1(maxNumber, minNumber=0, lenght=0):
 	if lenght == 0:
 		lenght = (maxNumber-minNumber)
-	n = round(lenght*4/7)
+	lenght = lenght*4/7
 	colors = []
 	for i in range(0, maxNumber-minNumber+1):
-		arg = pi*i/n
+		arg = pi*i/lenght
 		r = poss(cos(arg))
 		g = poss(sin(arg))
 		b = poss(cos(pi-arg))
@@ -60,11 +60,11 @@ def genColors1(maxNumber, minNumber=0, lenght=0):
 def genColors2(maxNumber, minNumber=0, lenght=0):
 	if lenght == 0:
 		lenght = (maxNumber-minNumber)
-	n = round(lenght*4/5)
+	lenght = lenght*4/5
 	per = 3*pi/2
 	colors = []
 	for i in range(0, maxNumber-minNumber+1):
-		arg = pi*i/n
+		arg = pi*i/lenght
 		r = redcos(arg%per)
 		g = redcos((arg-pi/2)%per)
 		b = redcos((arg-pi)%per)
