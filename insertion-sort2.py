@@ -17,8 +17,8 @@ width = round(gap/2)
 Height = 200 + width * 5
 sc = pygame.display.set_mode((Width, Height))
 
-indexes = list(range(cellsNumber))
-random.shuffle(indexes)
+indices = list(range(cellsNumber))
+random.shuffle(indices)
 
 def poss(x):
 	if x > 0:
@@ -33,7 +33,7 @@ def normalizeColor(rgb):
 	b = rgb[2] + k
 	return (r,g,b)
 
-def getColor(i):
+def genColor(i):
 	n = (cellsNumber-1)//1.75
 	arg = pi*i/n
 	r = poss(cos(arg))
@@ -50,7 +50,7 @@ def rcos(x):
 	elif pi <= x <= 3*pi/2:
 		return cos(x + pi/2)
 
-def getColor2(i):
+def genColor2(i):
 	n = (cellsNumber-1)//1.25
 	per = 3*pi/2
 	arg = (pi*i/n)
@@ -92,8 +92,8 @@ def allCellsNotMoving():
 			return False
 	return not temp.moving
 
-for i, e in enumerate(indexes):
-	cells.append(Cell(sc, width, getColor2(e), e, getpos(i)))
+for i, e in enumerate(indices):
+	cells.append(Cell(sc, width, genColor2(e), e, getpos(i)))
 
 cur = 1
 triangle = Triangle(sc, width/2, (255,255,255), 0, trianglePos(cur))
