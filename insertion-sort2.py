@@ -3,62 +3,19 @@ import random
 import time
 import sys
 from figures import *
+from color_generator import *
 
 clock = pygame.time.Clock()
 pygame.init()
 
 Width = 1500
-cells = []
-cellsNumber = 25
+cellsNumber = 100
 border = Width/cellsNumber
 gap = (Width - 2*border) / (cellsNumber-1)
 width = round(gap/2)
 
 Height = 200 + width * 5
 sc = pygame.display.set_mode((Width, Height))
-
-indices = list(range(cellsNumber))
-random.shuffle(indices)
-
-def poss(x):
-	if x > 0:
-		return x
-	else:
-		return 0
-
-def normalizeColor(rgb):
-	k = 255 - max(rgb)
-	r = rgb[0] + k
-	g = rgb[1] + k
-	b = rgb[2] + k
-	return (r,g,b)
-
-def genColor(i):
-	n = (cellsNumber-1)//1.75
-	arg = pi*i/n
-	r = poss(cos(arg))
-	g = poss(sin(arg))
-	b = poss(cos(pi-arg))
-	color = [round((255*x)%256) for x in (r,g,b)]
-	return normalizeColor(color)
-
-def rcos(x):
-	if 0 <= x <= pi/2:
-		return cos(x)
-	elif pi/2 <= x <= pi:
-		return 0
-	elif pi <= x <= 3*pi/2:
-		return cos(x + pi/2)
-
-def genColor2(i):
-	n = (cellsNumber-1)//1.25
-	per = 3*pi/2
-	arg = (pi*i/n)
-	r = rcos(arg%per)
-	g = rcos((arg-pi/2)%per)
-	b = rcos((arg-pi)%per)
-	color = [round(255*x) for x in (r,g,b)]
-	return normalizeColor(color)
 
 def getpos(i):
 	return border+i*gap, Height/3
@@ -92,8 +49,14 @@ def allCellsNotMoving():
 			return False
 	return not temp.moving
 
+indices = list(range(cellsNumber))
+random.shuffle(indices)
+#start = 10
+#indices = random.sample(range(start, cellsNumber+start), cellsNumber)
+colors = genColors(max(indices), min(indices), 0, type_=2)
+cells = []
 for i, e in enumerate(indices):
-	cells.append(Cell(sc, width, genColor2(e), e, getpos(i)))
+	cells.append(Cell(sc, width, colors[e], e, getpos(i)))
 
 cur = 1
 triangle = Triangle(sc, width/2, (255,255,255), 0, trianglePos(cur))
