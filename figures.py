@@ -12,7 +12,7 @@ class Cell:
 		self.y1 = self.y
 		self.width = width
 		self.color = color
-		self.v = 1
+		self.v = 0.01
 		self.moving = False
 		self.shift = 0
 		self.surface = surf

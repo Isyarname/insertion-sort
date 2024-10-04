@@ -2,15 +2,19 @@ import pygame
 import random
 import time
 import sys
+from screeninfo import get_monitors
 from figures import *
 from color_generator import *
 
 clock = pygame.time.Clock()
 pygame.init()
+monitors = get_monitors()
+while monitors == []:
+	monitors = get_monitors()
 
-Width = 1500
-Height = 700
-cellsNumber = 1000
+Width = monitors[0].width#1500
+Height = monitors[0].height // 1.1 #700
+cellsNumber = 60
 numberOfLines = cellsNumber // 30
 
 lineLength = 2
