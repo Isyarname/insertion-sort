@@ -9,13 +9,13 @@ from color_generator import *
 clock = pygame.time.Clock()
 pygame.init()
 monitors = get_monitors()
-while monitors == []:
+while monitors == []: # так надо, не трогать
 	monitors = get_monitors()
 
-Width = monitors[0].width#1500
-Height = monitors[0].height // 1.1 #700
-cellsNumber = 60
-numberOfLines = cellsNumber // 30
+Width = monitors[0].width # 1500
+Height = monitors[0].height // 1.1 # 700
+numberOfCells = 45
+numberOfLines = numberOfCells // 30
 
 lineLength = 2
 gap = Width / (lineLength+1)
@@ -26,7 +26,7 @@ def cellpos(i):
 	y = width*3 + (i//lineLength) * width*5
 	return (x, y)
 
-while cellpos(cellsNumber-1)[1] > Height - width*3:
+while cellpos(numberOfCells-1)[1] > Height - width*3:
 		lineLength += 1
 		gap = Width / (lineLength+1)
 		width = round(gap/2)
@@ -42,7 +42,7 @@ def cellpos(i):
 
 def trianglePos(x):
 	cp = cellpos(x)
-	return (cp[0], cp[1]-width*2)#(border+cur*gap, Height/3 - width*2)
+	return (cp[0], cp[1]-width*2)
 
 def _qiut():
 	pygame.quit()
@@ -61,10 +61,10 @@ def allCellsNotMoving():
 			return False
 	return not temp.moving
 
-indices = list(range(cellsNumber))
+indices = list(range(numberOfCells))
 random.shuffle(indices)
 #start = 10
-#indices = random.sample(range(start, cellsNumber+start), cellsNumber)
+#indices = random.sample(range(start, numberOfCells+start), numberOfCells)
 colors = genColors(max(indices), min(indices), type_=2)
 cells = []
 for i, e in enumerate(indices):
@@ -80,7 +80,7 @@ i = 0
 isSorted = False
 def play():
 	global i
-	global cellsNumber
+	global numberOfCells
 	global cur
 	global temp
 	global prevTempI
@@ -93,7 +93,7 @@ def play():
 			temp.isNext = False
 			temp.selected = True
 
-	if not isSorted and cur >= cellsNumber:
+	if not isSorted and cur >= numberOfCells:
 		isSorted = True
 		for cell in cells:
 			cell.selected = False
@@ -110,7 +110,7 @@ def play():
 			prevTempI = i + 1
 			cur += 1
 			triangle.setpos(trianglePos(cur))
-			if cur < cellsNumber:
+			if cur < numberOfCells:
 				temp = cells[cur]
 				temp.isNext = True
 			i = cur - 1
@@ -136,7 +136,7 @@ while True:
 	temp.draw()
 	triangle.draw()
 
-	clock.tick(60 + cellsNumber)
+	clock.tick(60 + numberOfCells)
 	pygame.display.set_caption(str(clock))
 	pygame.display.update()
 	pygame.display.flip()
