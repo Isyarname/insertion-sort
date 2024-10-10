@@ -35,11 +35,6 @@ while cellpos(numberOfCells-1)[1] > Height - width*3:
 
 sc = pygame.display.set_mode((Width, Height))
 
-def cellpos(i):
-	x = gap + (i%lineLength) * gap
-	y = width*3 + (i//lineLength) * width*5
-	return (x, y)
-
 def trianglePos(x):
 	cp = cellpos(x)
 	return (cp[0], cp[1]-width*2)
@@ -126,8 +121,8 @@ while True:
 	sc.fill((20,40,80))
 	events()
 
-	if time.time() - startTime > 2:
-		if time.time() - startTime < 2.1 and not temp.moving:
+	if time.time() - startTime > 1:
+		if time.time() - startTime < 1.1 and not temp.moving:
 			temp.lower()
 		play()
 
